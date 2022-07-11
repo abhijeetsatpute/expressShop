@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-app.use(adminRoutes);
+app.use('/admin',adminRoutes);
 app.use(shopRoute);
 
 app.use((req, res, next) => {
