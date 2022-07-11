@@ -14,4 +14,8 @@ app.use(bodyParser.urlencoded({
 app.use(adminRoutes);
 app.use(shopRoute);
 
+app.use((req, res, next) => {
+    res.status(404).send('<p>404 Page Not Found</p>');
+});
+
 app.listen(3000)
