@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const adminRoutes = require('./routes/admin');
+const adminData = require('./routes/admin');
 const shopRoute = require('./routes/shop');
 
 // configure the app to use bodyParser()
@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
 //grant access to public files
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin',adminRoutes);
+app.use('/admin', adminData.routes);
 app.use(shopRoute);
 
 app.use((req, res, next) => {
