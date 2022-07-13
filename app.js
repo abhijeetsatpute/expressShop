@@ -8,8 +8,10 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const adminData = require('./routes/admin');
+const adminRoute = require('./routes/admin');
 const shopRoute = require('./routes/shop');
+
+const errorController = require('./controllers/error');
 
 // configure the app to use bodyParser()
 app.use(bodyParser.urlencoded({
@@ -18,12 +20,9 @@ app.use(bodyParser.urlencoded({
 //grant access to public files
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin', adminData.routes);
+app.use('/admin', adminRoute);
 app.use(shopRoute);
 
-app.use((req, res, next) => {
-    // res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
-    res.status(404).render('404', {title : "Page not found", path : 'undefined'});
-});
+app.use(errorController.get404);
 
 app.listen(3002)
