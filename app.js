@@ -23,7 +23,7 @@ app.use(shopRoute);
 
 app.use((req, res, next) => {
     // res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
-    res.status(404).render('404', {title : "Page not found"});
+    res.status(404).render('404', {title : "Page not found", path : 'undefined'});
 });
 
 app.listen(3002)
