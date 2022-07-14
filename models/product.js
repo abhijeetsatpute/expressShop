@@ -19,10 +19,17 @@ module.exports = {
     },
     add : function(product){
         getProductsFromFile(products => {
+            product.id = Math.random().toString();
             products.push(product);
             fs.writeFile(dataFilePath, JSON.stringify(products), (err) => {
                 console.log(err);
             });
         })
     },
+    findById : function(id, cb){
+        getProductsFromFile(products => {
+            const product = products.find(p => p.id === id);
+            cb(product);
+        })
+    }
 }

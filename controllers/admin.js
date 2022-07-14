@@ -1,8 +1,8 @@
-const Product = require('../models/product')
+const Product = require('../models/product');
 
 exports.getAddProduct = (req,res,next) => {
     res.render(
-        'add-product', 
+        'admin/add-product', 
         {
             title: 'Add Product', 
             path : req.originalUrl, 
@@ -15,18 +15,16 @@ exports.getAddProduct = (req,res,next) => {
 
 exports.postProducts = (req,res,next) => {
     Product.add(req.body);
+    console.log(req.body);
     res.redirect('/');
 }
 
 exports.getProducts = (req,res,next) => {
     Product.get(products => {
-        res.render('shop', { 
+        res.render('admin/products', { 
             products : products, 
-            title : "My Shop", 
+            title : "Admin Products", 
             path : req.originalUrl, 
-            hasProducts : products.length > 0,
-            activeShop: true,
-            productCSS: true
         });
     });
 }
