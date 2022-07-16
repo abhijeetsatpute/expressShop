@@ -40,5 +40,17 @@ module.exports = {
             const product = products.find(p => p.id === id);
             cb(product);
         })
+    },
+    deleteById : function(id) {
+        getProductsFromFile(products => {
+            const exisitingProductIndex = products.findIndex(prod => prod.id == id);
+            const updateProducts = [...products];
+            updateProducts.splice(exisitingProductIndex, 1);
+            // OR use filter method to return those elemts which not contains the id
+            // products.filter(prod => prod.id !== id)
+            fs.writeFile(dataFilePath, JSON.stringify(updateProducts), (err) => {
+                console.log(err);
+            });
+        })
     }
 }
