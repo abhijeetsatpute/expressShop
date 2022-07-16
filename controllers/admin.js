@@ -10,7 +10,6 @@ exports.getAddProduct = (req,res,next) => {
 
 exports.postProducts = (req,res,next) => {
     Product.add(req.body);
-    console.log(req.body);
     res.redirect('/');
 }
 
@@ -34,6 +33,11 @@ exports.getEditProduct = (req,res,next) => {
         });
     })
     
+}
+
+exports.postEditProduct = (req, res, next) => {
+    Product.add(req.body);
+    res.redirect('/admin/products');
 }
 
 exports.getProducts = (req,res,next) => {

@@ -19,11 +19,20 @@ module.exports = {
     },
     add : function(product){
         getProductsFromFile(products => {
-            product.id = Math.random().toString();
-            products.push(product);
-            fs.writeFile(dataFilePath, JSON.stringify(products), (err) => {
-                console.log(err);
-            });
+            if(product.id){
+                const exisitingProductIndex = products.findIndex(prod => prod.id == product.id);
+                const updateProducts = [...products];
+                updateProducts[exisitingProductIndex] = product;
+                fs.writeFile(dataFilePath, JSON.stringify(updateProducts), (err) => {
+                    console.log(err);
+                });
+            } else {
+                product.id = Math.random().toString();
+                products.push(product);
+                fs.writeFile(dataFilePath, JSON.stringify(products), (err) => {
+                    console.log(err);
+                });
+            }
         })
     },
     findById : function(id, cb){
