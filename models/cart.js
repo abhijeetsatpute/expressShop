@@ -31,5 +31,22 @@ module.exports = {
                 console.log(err);
             });
         });
+    },
+    deleteProduct : function(id, productPrice){
+        fs.readFile(dataFilePath, (err, data) => {
+            if(err){
+                return;
+            }
+            const updatedCart = { ...JSON.parse(data) };
+            const product = updatedCart.products.find(prod => prod.id === id);
+            const prouctQty = product.qty;
+            updatedCart.products = updatedCart.products.filter(
+                prod => prod.id !== id
+            );
+            updatedCart.totalPrice = updatedCart.totalPrice - productPrice * prouctQty;
+            fs.writeFile(dataFilePath, JSON.stringify(updatedCart), err => {
+                console.log(err);
+            })
+        })
     }
 }

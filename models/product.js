@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const Cart = require('./cart');
+
 const dataFilePath = path.join(__dirname, '..', 'data', 'products.json');
 
 const getProductsFromFile = cb => {
@@ -43,13 +45,16 @@ module.exports = {
     },
     deleteById : function(id) {
         getProductsFromFile(products => {
+            const product = products.find(p => p.id === id);
             const exisitingProductIndex = products.findIndex(prod => prod.id == id);
             const updateProducts = [...products];
             updateProducts.splice(exisitingProductIndex, 1);
             // OR use filter method to return those elemts which not contains the id
             // products.filter(prod => prod.id !== id)
             fs.writeFile(dataFilePath, JSON.stringify(updateProducts), (err) => {
-                console.log(err);
+                if(!err){
+                    Cart.deleteProduct(id, product);
+                }
             });
         })
     }
