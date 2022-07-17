@@ -14,13 +14,16 @@ exports.getProducts = (req,res,next) => {
 }
 
 exports.getProduct = (req,res,next) => {
-    Product.findById(req.params.productId, product => {
-        res.render('shop/product-detail', { 
-            title : product.title,
-            product : product, 
-            path : '/products', 
-        });
-    })
+    Product.findById(req.params.productId)
+        .then( ([product]) => {    
+            console.log(product);
+            res.render('shop/product-detail', { 
+                title : product.title,
+                product : product[0], 
+                path : '/products', 
+            });
+        })
+        .catch( err => console.log(err));
 }
 
 exports.getIndex = (req, res, next) => {
@@ -64,10 +67,12 @@ exports.postCart = (req, res, next) => {
 
 exports.postCartDeleteProduct = (req, res, next) => {
     const productId = req.body.id;
-    Product.findById(productId, (product) => {
-        Cart.deleteProduct(productId, product.price);
-        res.redirect('/cart');
-    })
+    Product.findById(productId)
+        .then(product => {
+            Cart.deleteProduct(productId, product.price);
+            res.redirect('/cart');
+        })
+        .catch( err => { console.error(err) })
 }
 
 exports.getCheckout = (req, res, next) => {

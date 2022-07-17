@@ -6,16 +6,16 @@ module.exports = {
         return db.execute("SELECT * FROM products");
     },
     add : function(product){
-            return  db.execute(
-                "INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)",
-                [product.title, product.price, product.imageUrl, product.description]
-            );
+        return  db.execute(
+            "INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)",
+            [product.title, product.price, product.imageUrl, product.description]
+        );
     },
-    findById : function(id, cb){
-        getProductsFromFile(products => {
-            const product = products.find(p => p.id === id);
-            cb(product);
-        })
+    findById : function(id){
+        return  db.execute(
+            "SELECT * FROM products WHERE id = ?",
+            [id]
+        );
     },
     deleteById : function(id) {
         getProductsFromFile(products => {
