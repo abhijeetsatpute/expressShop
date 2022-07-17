@@ -2,13 +2,15 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 
 exports.getProducts = (req,res,next) => {
-    Product.get(products => {
-        res.render('shop/product-list', { 
-            products : products, 
-            title : "All Products", 
-            path : req.originalUrl, 
-        });
-    });
+    Product.get()
+        .then(([rows, fieldData]) => {
+            res.render('shop/product-list', { 
+                products : rows, 
+                title : "All Products", 
+                path : req.originalUrl, 
+            });
+        })
+        .catch( err => console.log(err));
 }
 
 exports.getProduct = (req,res,next) => {
@@ -22,13 +24,15 @@ exports.getProduct = (req,res,next) => {
 }
 
 exports.getIndex = (req, res, next) => {
-    Product.get(products => {
-        res.render('shop/index', {
-            products : products, 
-            title : "Shop", 
-            path : req.originalUrl,
-        });
-    });
+    Product.get()
+        .then(([row, fieldData]) => {
+            res.render('shop/index', {
+                products : row, 
+                title : "Shop", 
+                path : req.originalUrl,
+            });
+        })
+        .catch(err => console.log(err));
 }
 
 exports.getCart = (req, res, next) => {

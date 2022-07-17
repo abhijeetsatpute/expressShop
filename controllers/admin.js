@@ -1,4 +1,6 @@
+const { deleteById } = require('../models/product');
 const Product = require('../models/product');
+const db = require('../utils/database');
 
 exports.getAddProduct = (req,res,next) => {
     res.render('admin/edit-product', {
@@ -9,8 +11,14 @@ exports.getAddProduct = (req,res,next) => {
 }
 
 exports.postProducts = (req,res,next) => {
-    Product.add(req.body);
-    res.redirect('/');
+    Product.add(req.body)
+        .then(() => {
+            res.redirect('/');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    
 }
 
 exports.getEditProduct = (req,res,next) => {

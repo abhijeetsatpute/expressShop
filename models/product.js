@@ -1,41 +1,15 @@
-const fs = require('fs');
-const path = require('path');
-
+const db = require('../utils/database');
 const Cart = require('./cart');
 
-const dataFilePath = path.join(__dirname, '..', 'data', 'products.json');
-
-const getProductsFromFile = cb => {
-    fs.readFile(dataFilePath, (err, data) => {
-        if(!err){
-            data.toString() == '' ? cb([]) : cb(JSON.parse(data));
-        } else{
-            cb([]);
-        }
-    });
-}
-
 module.exports = {
-    get : function(cb){
-        getProductsFromFile(cb);
+    get : function(){
+        return db.execute("SELECT * FROM products");
     },
     add : function(product){
-        getProductsFromFile(products => {
-            if(product.id){
-                const exisitingProductIndex = products.findIndex(prod => prod.id == product.id);
-                const updateProducts = [...products];
-                updateProducts[exisitingProductIndex] = product;
-                fs.writeFile(dataFilePath, JSON.stringify(updateProducts), (err) => {
-                    console.log(err);
-                });
-            } else {
-                product.id = Math.random().toString();
-                products.push(product);
-                fs.writeFile(dataFilePath, JSON.stringify(products), (err) => {
-                    console.log(err);
-                });
-            }
-        })
+            return  db.execute(
+                "INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)",
+                [product.title, product.price, product.imageUrl, product.description]
+            );
     },
     findById : function(id, cb){
         getProductsFromFile(products => {
