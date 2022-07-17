@@ -1,35 +1,27 @@
-const db = require('../utils/database');
-const Cart = require('./cart');
+const Sequelize = require('sequelize');
 
-module.exports = {
-    get : function(){
-        return db.execute("SELECT * FROM products");
+const sequelize = require('../utils/database');
+
+const Product = sequelize.define('product', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
     },
-    add : function(product){
-        return  db.execute(
-            "INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)",
-            [product.title, product.price, product.imageUrl, product.description]
-        );
+    title : Sequelize.STRING,
+    price: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
     },
-    findById : function(id){
-        return  db.execute(
-            "SELECT * FROM products WHERE id = ?",
-            [id]
-        );
+    imageUrl: {
+        type: Sequelize.STRING,
+        allowNull: false,
     },
-    deleteById : function(id) {
-        getProductsFromFile(products => {
-            const product = products.find(p => p.id === id);
-            const exisitingProductIndex = products.findIndex(prod => prod.id == id);
-            const updateProducts = [...products];
-            updateProducts.splice(exisitingProductIndex, 1);
-            // OR use filter method to return those elemts which not contains the id
-            // products.filter(prod => prod.id !== id)
-            fs.writeFile(dataFilePath, JSON.stringify(updateProducts), (err) => {
-                if(!err){
-                    Cart.deleteProduct(id, product);
-                }
-            });
-        })
+    description: {
+        type: Sequelize.STRING,
+        allowNull: false,
     }
-}
+});
+
+module.exports = Product;
