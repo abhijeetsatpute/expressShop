@@ -1,4 +1,3 @@
-const { deleteById } = require('../models/product');
 const Product = require('../models/product');
 const db = require('../utils/database');
 
@@ -11,13 +10,18 @@ exports.getAddProduct = (req,res,next) => {
 }
 
 exports.postProducts = (req,res,next) => {
-    Product.add(req.body)
-        .then(() => {
-            res.redirect('/');
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl;
+    const price = req.body.price;
+    const description = req.body.description;
+    Product.create({
+        title: title,
+        imageUrl: imageUrl,
+        price: price,
+        description: description,
+    })
+    .then(result => { console.log(`Created Product: ${title}`)})
+    .catch(err => { console.log(err)});
     
 }
 
