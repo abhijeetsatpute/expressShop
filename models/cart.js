@@ -48,5 +48,15 @@ module.exports = {
                 console.log(err);
             })
         })
+    },
+    getCart : function(cb){
+        fs.readFile(dataFilePath, (err, data) => {
+            const cart = JSON.parse(data);
+            if(err){
+                cb(null);
+            } else {
+                cb(cart);
+            }
+        })
     }
 }
