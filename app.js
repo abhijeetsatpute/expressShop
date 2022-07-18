@@ -24,9 +24,6 @@ app.use(bodyParser.urlencoded({
 //grant access to public files
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin', adminRoute);
-app.use(shopRoute);
-
 app.use((req, res, next) => {
     User.findByPk(1)
     .then(user => {
@@ -35,6 +32,9 @@ app.use((req, res, next) => {
     })
     .catch(error => { console.log(error)});
 })
+
+app.use('/admin', adminRoute);
+app.use(shopRoute);
 
 app.use(errorController.get404);
 
