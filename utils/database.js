@@ -12,7 +12,7 @@
 //--sequelize: Uses mysql2 behind the scenes to create the connection pool--
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('node-complete', 'root', 'nodecomplete', {
+const sequelize = new Sequelize('node', 'root', 'Rudra@911', {
 //dialect for different syntax versions of mysql
   dialect: 'mysql',
   host: 'localhost'
