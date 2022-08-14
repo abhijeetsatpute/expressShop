@@ -60,8 +60,8 @@ Order.belongsToMany(Product, { through: OrderItem });
 //--------------------------------------------------------------------
 
 sequelize
-  .sync({ force: true })
-  // .sync()
+  // .sync({ force: true })
+  .sync()
   .then(result => {
     // console.log(result);
     return User.findByPk(1);
