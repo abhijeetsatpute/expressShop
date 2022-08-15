@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
 const mongoConnect = require('./utils/database').mongoConnect;
+const User = require('./models/user');
 
 const app = express();
 
@@ -19,13 +20,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //using a middleware to pass the user from table
 app.use((req, res, next) => {
-  // User.findByPk(1)
-  // .then(user => {
-  //   //storing the user sequelize object in the request itself
-  //   req.user = user;
+  User.findById("62f9b6fcf5ce629089469579")
+  .then(user => {
+    //storing the user sequelize object in the request itself
+    req.user = user;
     next();
-  // })
-  // .catch(err => console.log(err))
+  })
+  .catch(err => console.log(err))
 })
 
 app.use('/admin', adminRoutes);
@@ -34,5 +35,6 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 mongoConnect(() => {
+
   app.listen(3000);
 });
