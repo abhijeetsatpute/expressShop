@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
-const mongoConnect = require('./utils/database');
+const mongoConnect = require('./utils/database').mongoConnect;
 
 const app = express();
 
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   // .then(user => {
   //   //storing the user sequelize object in the request itself
   //   req.user = user;
-  //   next();
+    next();
   // })
   // .catch(err => console.log(err))
 })
@@ -33,7 +33,6 @@ app.use('/admin', adminRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(client => {
-  console.log(client);
+mongoConnect(() => {
   app.listen(3000);
 });
