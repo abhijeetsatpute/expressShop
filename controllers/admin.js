@@ -1,5 +1,7 @@
+const mongodb = require('mongodb');
 const Product = require('../models/product');
-const { route } = require('../routes/admin');
+
+const ObjectId = mongodb.ObjectId;
 
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
@@ -36,8 +38,9 @@ exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
   Product.findById(prodId)
+  // Product.findById(prodId)
   .then(product => {
-    if(!product){
+    if (!product) {
       return res.redirect('/');
     }
     res.render('admin/edit-product', {
@@ -47,30 +50,31 @@ exports.getEditProduct = (req, res, next) => {
       product: product
     });
   })
-  .catch(err => { console.log(err)});
-  
+  .catch(err => console.log(err));
 };
 
-// exports.postEditProduct = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   const updatedTitle = req.body.title;
-//   const updatedPrice = req.body.price;
-//   const updatedImageUrl = req.body.imageUrl;
-//   const updatedDesc = req.body.description;
-//   Product.findByPk(prodId)
-//     .then(product => {
-//       product.title = updatedTitle;
-//       product.price = updatedPrice;
-//       product.description = updatedDesc;
-//       product.imageUrl = updatedImageUrl;
-//       return product.save();
-//     })
-//     .then(result => {
-//       console.log('UPDATED PRODUCT!');
-//       res.redirect('/admin/products');
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.postEditProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+  const updatedTitle = req.body.title;
+  const updatedPrice = req.body.price;
+  const updatedImageUrl = req.body.imageUrl;
+  const updatedDesc = req.body.description;
+
+  const product = new Product(
+    updatedTitle,
+    updatedPrice,
+    updatedDesc,
+    updatedImageUrl,
+    new ObjectId(prodId)
+  );
+  product
+    .save()
+    .then(result => {
+      console.log('UPDATED PRODUCT!');
+      res.redirect('/admin/products');
+    })
+    .catch(err => console.log(err));
+};
 
 exports.getProducts = (req, res, next) => {
 
