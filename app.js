@@ -20,10 +20,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //using a middleware to pass the user from table
 app.use((req, res, next) => {
-  User.findById("62f9b6fcf5ce629089469579")
+  User.findById('62f9b6fcf5ce629089469579')
   .then(user => {
-    //storing the user sequelize object in the request itself
-    req.user = user;
+    //storing the user object in the request itself allows us to work with User model & its methods
+    req.user = new User(user.name, user.email, user.cart, user._id);;
     next();
   })
   .catch(err => console.log(err))
