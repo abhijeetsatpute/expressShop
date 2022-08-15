@@ -1,21 +1,17 @@
-// const mysql = require('mysql2');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
-// const pool = mysql.createPool({
-//     host: 'localhost',
-//     user: 'root',
-//     database: 'node',
-//     password: 'Rudra@911',
-// });
+const mongoConnect = callback => {
+  MongoClient.connect(
+    'mongodb+srv://abhi:hunter123@cluster0.pbbtxll.mongodb.net/?retryWrites=true&w=majority'
+  )
+    .then(client => {
+      console.log('Connected!');
+      callback(client);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
 
-// module.exports = pool.promise();
-
-//--sequelize: Uses mysql2 behind the scenes to create the connection pool--
-const Sequelize = require('sequelize');
-
-const sequelize = new Sequelize('node', 'root', 'Rudra@911', {
-//dialect for different syntax versions of mysql
-  dialect: 'mysql',
-  host: 'localhost'
-});
-
-module.exports = sequelize;
+module.exports = mongoConnect;
