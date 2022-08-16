@@ -57,7 +57,6 @@ exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then(product => {
-      console.log(req.user);
       //Now req.user is a full User Model
       return req.user.addToCart(product);
     })
