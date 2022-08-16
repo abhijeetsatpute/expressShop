@@ -13,8 +13,8 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   // Totally Different Request and this gets end
-  // Different Set-Cookie Values :
-  // - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
-  res.setHeader('Set-Cookie', 'loggedIn=true; Max-Age=100');
+  // session object is added by the session middleware
+  // Thi is saved across requests but not across users 
+  req.session.isLoggedIn = true;
   res.redirect('/')
 };
