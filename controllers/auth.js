@@ -24,20 +24,37 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
   // Totally Different Request and this gets end
   // session object is added by the session middleware
   // Thi is saved across requests but not across users 
   // using a middleware to pass the user from table
-  User.findById('62fb794df4ccc916cf1fce0c')
+  User.findOne({ email: email })
   .then(user => {
-    //Full mongoose model
-    req.session.user = user;
-    req.session.isLoggedIn = true;
-    //Guarantees that the session is saved before redirect
-    req.session.save(err => {
-      console.log(err);
-      res.redirect('/')
-    })
+    if (!user) {
+      return res.redirect('/login');
+    }
+    bcrypt
+      .compare(password, user.password)
+      // Matched or Not Matched We will go into .then() 
+      // Boolean value
+      .then(doMatch => {
+        // if doMatch is true ie. Password Matched
+        if (doMatch) {
+          req.session.isLoggedIn = true;
+          req.session.user = user;
+          return req.session.save(err => {
+            console.log(err);
+            res.redirect('/');
+          });
+        }
+        res.redirect('/login');
+      })
+      .catch(err => {
+        console.log(err);
+        res.redirect('/login');
+      });
   })
   .catch(err => console.log(err))
 };
