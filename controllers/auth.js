@@ -1,3 +1,5 @@
+const User = require('../models/user');
+
 exports.getLogin = (req, res, next) => {
   // const isLoggedIn = req
   //   .get('Cookie')
@@ -15,6 +17,13 @@ exports.postLogin = (req, res, next) => {
   // Totally Different Request and this gets end
   // session object is added by the session middleware
   // Thi is saved across requests but not across users 
-  req.session.isLoggedIn = true;
-  res.redirect('/')
+  // using a middleware to pass the user from table
+  User.findById('62fb794df4ccc916cf1fce0c')
+  .then(user => {
+    //Full mongoose model
+    req.session.user = user;
+    req.session.isLoggedIn = true;
+    res.redirect('/')
+  })
+  .catch(err => console.log(err))
 };

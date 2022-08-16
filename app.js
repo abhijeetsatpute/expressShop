@@ -36,17 +36,6 @@ app.use(
   })
 );
 
-// using a middleware to pass the user from table
-app.use((req, res, next) => {
-  User.findById('62fb794df4ccc916cf1fce0c')
-  .then(user => {
-    //Full mongoose model
-    req.user = user;
-    next();
-  })
-  .catch(err => console.log(err))
-})
-
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
