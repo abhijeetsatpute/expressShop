@@ -52,6 +52,7 @@ userSchema.methods.removeFromCart = function(productId) {
   return this.save();
 };
 
+//Clearing the cart after storing an order
 userSchema.methods.clearCart = function() {
   this.cart = { items: [] };
   return this.save();
