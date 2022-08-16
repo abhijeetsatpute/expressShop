@@ -21,7 +21,9 @@ const productSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('Product', productSchema);
+// Connect schema to Mongoose model 
+// collection name is taken by model name in lower case plural form
+module.exports = mongoose.model('Product', productSchema)
 
 // const mongodb = require('mongodb');
 // const getDb = require('../utils/database').getDb;
