@@ -87,7 +87,12 @@ exports.postEditProduct = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
 
   Product.find()
+  //----- Control which all fields to retrieved and excluded
+  // .select('title price -_id')
+  //----- Automatically Populates the related field not just the ID
+  // .populate('userId', 'name')
   .then((products) => {
+    console.log(products);
     res.render('admin/products', {
       prods: products,
       pageTitle: 'Admin Products',
