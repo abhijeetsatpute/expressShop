@@ -13,6 +13,8 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
   // Totally Different Request and this gets end
-  res.setHeader('Set-Cookie', 'loggedIn=true');
+  // Different Set-Cookie Values :
+  // - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+  res.setHeader('Set-Cookie', 'loggedIn=true; Max-Age=100');
   res.redirect('/')
 };
