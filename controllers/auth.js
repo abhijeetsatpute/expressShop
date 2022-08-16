@@ -13,6 +13,14 @@ exports.getLogin = (req, res, next) => {
   });
 };
 
+exports.getSignup = (req, res, next) => {
+  res.render('auth/signup', {
+    path: '/signup',
+    pageTitle: 'Signup',
+    isAuthenticated: false
+  });
+};
+
 exports.postLogin = (req, res, next) => {
   // Totally Different Request and this gets end
   // session object is added by the session middleware
@@ -31,6 +39,8 @@ exports.postLogin = (req, res, next) => {
   })
   .catch(err => console.log(err))
 };
+
+exports.postSignup = (req, res, next) => {};
 
 exports.postLogout = (req, res, next) => {
   // .destroy() is provided by the session package we using
