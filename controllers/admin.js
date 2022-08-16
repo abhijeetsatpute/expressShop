@@ -22,7 +22,7 @@ exports.postAddProduct = (req, res, next) => {
     imageUrl: imageUrl,
     // mongoose will auto get just the _id (Not entire user) from User model
     // userId: req.user._id,
-    userId: req.session.user,
+    userId: req.user,
 
   });
   product
