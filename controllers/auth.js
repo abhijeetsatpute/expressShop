@@ -23,7 +23,11 @@ exports.postLogin = (req, res, next) => {
     //Full mongoose model
     req.session.user = user;
     req.session.isLoggedIn = true;
-    res.redirect('/')
+    //Guarantees that the session is saved before redirect
+    req.session.save(err => {
+      console.log(err);
+      res.redirect('/')
+    })
   })
   .catch(err => console.log(err))
 };
