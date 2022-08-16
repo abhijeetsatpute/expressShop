@@ -18,7 +18,11 @@ exports.postAddProduct = (req, res, next) => {
     title: title,
     price: price,
     description: description,
-    imageUrl: imageUrl
+    imageUrl: imageUrl,
+    // mongoose will auto get just the _id (Not entire user) from User model
+    // userId: req.user._id,
+    userId: req.user,
+
   });
   product
   // .save() method is provided by Mongoose
