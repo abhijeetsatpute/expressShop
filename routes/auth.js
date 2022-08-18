@@ -14,7 +14,7 @@ router.post(
     '/login', 
     [
         check('password', "Invalid password Length")
-            .isLength({ min:8})
+            .isLength({ min:6})
             .withMessage(),
         check('email')
             .isEmail()
