@@ -15,10 +15,12 @@ router.post(
     [
         check('password', "Invalid password Length")
             .isLength({ min:6})
-            .withMessage(),
+            .isAlphanumeric()
+            .trim(),
         check('email')
             .isEmail()
             .withMessage("Enter a valid email")
+            .normalizeEmail()
     ], 
     authController.postLogin
 );
@@ -41,13 +43,17 @@ router.post(
                       );
                     }
                 });
-        }),
+        })
+        .normalizeEmail(),
         body(
             'password',
             'Please enter a password with only numbers and text and at least 5 characters.'
         ).isLength({ min: 5 })
-            .isAlphanumeric(),
-        body('confirmPassword').custom((value, { req }) => {
+            .isAlphanumeric()
+            .trim(),
+        body('confirmPassword')
+        .trim()
+        .custom((value, { req }) => {
             if (value !== req.body.password) {
                 throw new Error('Passwords have to match!');
         }
