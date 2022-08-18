@@ -55,15 +55,15 @@ exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const errors = validationResult(req);
-  console.log(errors, typeof errors);
-  // if (!errors.isEmpty()) {
-  //   console.log(errors.array());
-  //   return res.status(422).render('auth/login', {
-  //     path: '/login',
-  //     pageTitle: 'Login',
-  //     errorMessage: errors.array()[0].msg
-  //   });
-  // }
+  // console.log(errors, typeof errors);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render('auth/login', {
+      path: '/login',
+      pageTitle: 'Login',
+      errorMessage: errors.array()[0].msg
+    });
+  }
   // Totally Different Request and this gets end
   // session object is added by the session middleware
   // Thi is saved across requests but not across users 
