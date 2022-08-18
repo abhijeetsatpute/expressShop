@@ -43,7 +43,7 @@ exports.postAddProduct = (req, res, next) => {
   }
 
   const product = new Product({
-    _id : mongoose.Types.ObjectId("62fba3f44720e04ed8d533df"),
+    // _id : mongoose.Types.ObjectId("62fba3f44720e04ed8d533df"),
     title: title,
     price: price,
     description: description,
@@ -114,7 +114,12 @@ exports.getEditProduct = (req, res, next) => {
       validationErrors: []
     });
   })
-  .catch(err => res.redirect('/500'));
+  .catch(err => {
+    // To reduce code duplicatio use Error objects instead
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -159,7 +164,12 @@ exports.postEditProduct = (req, res, next) => {
       })
     })
     
-    .catch(err => console.log(err));
+    .catch(err => {
+      // To reduce code duplicatio use Error objects instead
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getProducts = (req, res, next) => {
@@ -177,7 +187,12 @@ exports.getProducts = (req, res, next) => {
       path: '/admin/products',
     });
   })
-  .catch(err => { console.log(err)});
+  .catch(err => {
+    // To reduce code duplicatio use Error objects instead
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  });
   
 };
 
@@ -188,5 +203,10 @@ exports.postDeleteProduct = (req, res, next) => {
       console.log('DESTROYED PRODUCT');
       res.redirect('/admin/products');
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      // To reduce code duplicatio use Error objects instead
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
