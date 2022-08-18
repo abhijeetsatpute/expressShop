@@ -69,7 +69,7 @@ mongoose
   .connect(MONGODB_URI
   )
   .then(result => {
-    app.listen(80);
+    app.listen(process.env.PORT || 80);
   })
   .catch(err => {
     console.log(err);
