@@ -78,7 +78,15 @@ exports.postAddProduct = (req, res, next) => {
       // });
 
       // Way of handling errors for Bigger problems to show a common error page
-      res.redirect('/500');
+      // res.redirect('/500');
+
+      // To reduce code duplicatio use Error objects instead
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      // Here next() is called with error pass in as argument
+      // we let express know that error occurred & will skip all other middleware and move on to the Error handling middleware
+      // For multiple error-handling middleware, Top to Bottom middleware
+      return next(error);
     });
 };
 
@@ -106,7 +114,7 @@ exports.getEditProduct = (req, res, next) => {
       validationErrors: []
     });
   })
-  .catch(err => console.log(err));
+  .catch(err => res.redirect('/500'));
 };
 
 exports.postEditProduct = (req, res, next) => {
