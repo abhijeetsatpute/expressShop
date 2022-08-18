@@ -89,7 +89,7 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
 
-  Product.find()
+  Product.find({ userId: req.user._id })
   //----- Control which all fields to retrieved and excluded
   // .select('title price -_id')
   //----- Automatically Populates the related field not just the ID
