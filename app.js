@@ -42,11 +42,20 @@ app.use(csrfProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
+app.use((req, res, next) => {
+  // + For synchronous places: if you throw an error express will detect it and execute it's next error handling middleware
+  // throw new Error('Sync Dummy');
   if (!req.session.user) {
     return next();
   }
   User.findById(req.session.user._id)
     .then(user => {
+      // throw new Error('Dummy');
       if(!user){
         return next();
       }
@@ -54,14 +63,11 @@ app.use((req, res, next) => {
       next();
     })
     .catch(err => {
-      throw new Error(err);
+      // *Throwing Error Here doesnt Lead to our General Error Handling Middleware Call*
+      // + For async code: inside of then() catch() and callbacks 
+      // + throwing error and catching in next error handling middleware doesn't not work ! We have to use next(new Error(err))
+      next(new Error(err));
     });
-});
-
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-  next();
 });
 
 app.use('/admin', adminRoutes);
@@ -75,7 +81,12 @@ app.use(errorController.get404);
 // Special Error Handling Middleware by Express with 4 arguments
 app.use((error, req, res, next) => {
   // res.status(error.httpStatusCode).render(...);
-  res.redirect('/500');
+  // res.redirect('/500');
+  res.status(500).render('500', {
+    pageTitle: 'Error!',
+    path: '/500',
+    isAuthenticated: req.session.isLoggedIn
+  });
 });
 
 mongoose
