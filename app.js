@@ -13,7 +13,7 @@ const errorController = require('./controllers/error');
 const User = require('./models/user');
 
 const MONGODB_URI =
-'mongodb+srv://abhi:hunter123@cluster0.pbbtxll.mongodb.net/shop?retryWrites=true&w=majority';
+  'mongodb+srv://abhi:hunter123@cluster0.pbbtxll.mongodb.net/shop?retryWrites=true&w=majority';
 
 const app = express();
 const store = new MongoDBStore({
@@ -21,6 +21,15 @@ const store = new MongoDBStore({
   collection: 'sessions'
 });
 const csrfProtection = csrf();
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname);
+  }
+});
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -30,7 +39,7 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({dest: 'images'}).single('image'));
+app.use(multer({ storage: fileStorage }).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
@@ -50,24 +59,19 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  // + For synchronous places: if you throw an error express will detect it and execute it's next error handling middleware
   // throw new Error('Sync Dummy');
   if (!req.session.user) {
     return next();
   }
   User.findById(req.session.user._id)
     .then(user => {
-      // throw new Error('Dummy');
-      if(!user){
+      if (!user) {
         return next();
       }
       req.user = user;
       next();
     })
     .catch(err => {
-      // *Throwing Error Here doesnt Lead to our General Error Handling Middleware Call*
-      // + For async code: inside of then() catch() and callbacks 
-      // + throwing error and catching in next error handling middleware doesn't not work ! We have to use next(new Error(err))
       next(new Error(err));
     });
 });
@@ -80,7 +84,6 @@ app.get('/500', errorController.get500);
 
 app.use(errorController.get404);
 
-// Special Error Handling Middleware by Express with 4 arguments
 app.use((error, req, res, next) => {
   // res.status(error.httpStatusCode).render(...);
   // res.redirect('/500');
@@ -92,14 +95,10 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(MONGODB_URI
-  )
+  .connect(MONGODB_URI)
   .then(result => {
-    app.listen(process.env.PORT || 80, function(){
-      console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-    });
+    app.listen(80);
   })
   .catch(err => {
     console.log(err);
   });
-
