@@ -10,6 +10,7 @@ const flash = require('connect-flash');
 const multer = require('multer');
 const helmet = require('helmet');
 require('dotenv').config();
+const compression = require('compression');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -98,6 +99,7 @@ app.use(shopRoutes);
 app.use(authRoutes);
 
 app.use(helmet());
+app.use(compression());
 
 app.get('/500', errorController.get500);
 
